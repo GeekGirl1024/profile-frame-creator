@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   entry: {
     app: [
-      './app.jsx'
+      './src/app.jsx'
     ]
   },
   module: {
