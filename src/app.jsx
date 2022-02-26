@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import ProfileFrameCreator from './profile-frame-creator/profile-frame-creator.jsx';
+
 class App extends React.Component {	
   render() {
     return (
@@ -9,6 +11,7 @@ class App extends React.Component {
           Hello World
         </header>
         <div>yay</div>
+        <ProfileFrameCreator />
       </div>
     )
   }
