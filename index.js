@@ -11,7 +11,7 @@ const middleware = webpackMiddleware(compiler, {
   publicPath: config.output.publicPath,
   serverSideRender: false,
   watchOptions: {
-    ignored: /.*/
+    //ignored: /.*/
   }
 });
 app.use(middleware);

@@ -8,7 +8,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          Hello World
+          Profile Frame Creator
         </header>
         <div>yay</div>
         <ProfileFrameCreator />
