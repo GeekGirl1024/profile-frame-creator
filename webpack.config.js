@@ -1,4 +1,5 @@
 const path = require('path');
+//const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -43,10 +44,22 @@ module.exports = {
       }
     ]
   },
-  plugins: [],
+  plugins: [
+
+//    new HtmlWebpackPlugin({
+//      title: 'Output Management',
+//    })
+
+  ],
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist'),
     publicPath: '/'
-  }
+  },
+  devServer: {
+  contentBase: './dist',
+  historyApiFallback: true,
+  writeToDisk: true
+  // no publicPath
+}
 };

@@ -12,7 +12,8 @@
     "react-dom": "16.x.x",
     "style-loader": "0.x.x",
     "url-loader": "^2.0.0",
-    "webpack": "4.x.x",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.9.2",
     "webpack-dev-middleware": "3.7.x"
   }
 }
