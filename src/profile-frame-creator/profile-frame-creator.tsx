@@ -1,22 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BasicUkraineImage from '/images/basic-ukraine.png';
+import BasicUkraineImage from '../images/basic-ukraine.png';
 
 /**
   Class representing the ProfileFrameCreator.
 */
 class ProfileFrameCreator extends React.Component {
+  private frame: HTMLImageElement;
   /**
    * Creates a ProfileFrameCreator
    */
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.frame = new Image();
     this.frame.src = BasicUkraineImage;
   }
 
   downloadImage(){
-  var canvas = document.getElementById("mycanvas");
+  var canvas = document.getElementById("mycanvas") as HTMLCanvasElement;
+  if (!canvas) {
+    return;
+  }
   var image = canvas.toDataURL("image/png")//.replace("image/png", "image/octet-stream");
   var link = document.createElement('a');
   link.download = "my-image.png";
@@ -25,7 +29,11 @@ class ProfileFrameCreator extends React.Component {
 }
 
   getFile() {
-    let file = document.querySelector('#myFile').files[0];
+    let filesElement = document.querySelector('#myFile') as HTMLInputElement;
+    if (!filesElement || !filesElement.files) {
+      return;
+    }
+    let file = filesElement.files[0];
 
     var FR= new FileReader();
 
@@ -36,13 +44,16 @@ class ProfileFrameCreator extends React.Component {
 
       var myImage = new Image();
       myImage.addEventListener("load", function(e) {
-              var canvas = document.getElementById('mycanvas');
+              var canvas = document.getElementById('mycanvas') as HTMLCanvasElement;
               var ctx = canvas.getContext('2d');
-              ctx.drawImage(myImage, 0, 0, 512, 512);
-              ctx.drawImage(frameImage, 0, 0, 512, 512);
+              ctx?.drawImage(myImage, 0, 0, 512, 512);
+              ctx?.drawImage(frameImage, 0, 0, 512, 512);
 
       });
-      myImage.src = e.target.result;
+      if (e.target && e.target.result){
+
+        myImage.src = e.target.result as string;
+      }
 
       //document.getElementById("img").src       = e.target.result;
       //document.getElementById("b64").innerHTML = e.target.result;
@@ -65,7 +76,7 @@ class ProfileFrameCreator extends React.Component {
    */
   render() {
     return (
-      <div>
+      <>
           Is this working?
           <input type="file" id="myFile" name="filename" />
           <button type="button" onClick={() => { this.getFile(); }}>
@@ -78,7 +89,7 @@ class ProfileFrameCreator extends React.Component {
           </canvas>
           <p id="b64"></p>
           <img id="img" height="150" />
-      </div>
+      </>
     )
   }
 }
