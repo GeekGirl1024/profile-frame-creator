@@ -1,7 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import ProfileFrameCreator from './profile-frame-creator/profile-frame-creator';
+import React from "react";
+import logo from "./logo.svg";
+import "./app.css";
+import ProfileFrameCreator from "./profile-frame-creator/profile-frame-creator";
 
 function App() {
   return (
@@ -22,7 +22,6 @@ function App() {
       </header>
 
       <ProfileFrameCreator></ProfileFrameCreator>
-
     </div>
   );
 }
