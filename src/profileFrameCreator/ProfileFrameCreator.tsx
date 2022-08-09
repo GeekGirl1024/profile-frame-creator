@@ -6,6 +6,7 @@ import BasicUkraineImage from '../images/basic-ukraine.png';
 import CircleUkraineImage from '../images/circle-ukraine.png';
 import LeftBottomCircleUkraine from '../images/left-bottom-circle-ukraine.png';
 import RightBottomFrameUkraine from '../images/right-bottom-frame-ukraine.png';
+import CircleAbortionIsHealthcare from '../images/circle-abortion-is-healthcare.png';
 import './ProfileFrameCreator.css'
 
 /**
@@ -25,7 +26,8 @@ class ProfileFrameCreator extends React.Component {
     BasicUkraineImage,
     CircleUkraineImage,
     LeftBottomCircleUkraine,
-    RightBottomFrameUkraine];
+    RightBottomFrameUkraine,
+    CircleAbortionIsHealthcare];
   
 
   /**
@@ -136,7 +138,7 @@ class ProfileFrameCreator extends React.Component {
       <>
           <h1>Profile Frame Creator</h1>
           <Box direction="row" >
-            <Box direction='column' >
+            <Box direction='column' background="#888888" >
               {
                 this.frames.map(
                   (src:string) => {
