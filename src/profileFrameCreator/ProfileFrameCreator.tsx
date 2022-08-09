@@ -45,7 +45,6 @@ class ProfileFrameCreator extends React.Component {
   }
 
   componentDidMount(){
-    console.log(this.containerRef.current)
     this.canvasElement = this.containerRef?.current?.querySelector(".profile-canvas") as HTMLCanvasElement;
     this.canvasContext = this.canvasElement.getContext('2d') as CanvasRenderingContext2D;
     this.profileImage.addEventListener("load", ((event: Event) => {
