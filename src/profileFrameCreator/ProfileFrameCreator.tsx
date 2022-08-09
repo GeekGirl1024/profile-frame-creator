@@ -1,20 +1,24 @@
 
-import React, { ReactElement } from 'react';
+import React, { createRef, ReactElement, RefObject } from 'react';
 import ReactDOM from 'react-dom';
-import { Box, Image as GrommetImage } from 'grommet';
+import { Box, Button, FileInput, Image as GrommetImage, Text, ThemeContext } from 'grommet';
 import BasicUkraineImage from '../images/basic-ukraine.png';
 import CircleUkraineImage from '../images/circle-ukraine.png';
 import LeftBottomCircleUkraine from '../images/left-bottom-circle-ukraine.png';
 import RightBottomFrameUkraine from '../images/right-bottom-frame-ukraine.png';
 import CircleAbortionIsHealthcare from '../images/circle-abortion-is-healthcare.png';
+import CircleMyBodyMyChoice from '../images/circle-my-body-my-choice.png';
+import CircleBillFosterForCongress from '../images/circle-bill-foster-for-congress.png';
 import './ProfileFrameCreator.css'
 
 /**
   Class representing the ProfileFrameCreator.
 */
 class ProfileFrameCreator extends React.Component {
+  private containerRef = createRef<HTMLDivElement>();
 
   private profileImage = new Image();
+  private profileImageSet = false;
   private backgroundImage = new Image();
   private canvasElement: HTMLCanvasElement | undefined;
   private canvasContext: CanvasRenderingContext2D | undefined;
@@ -27,7 +31,10 @@ class ProfileFrameCreator extends React.Component {
     CircleUkraineImage,
     LeftBottomCircleUkraine,
     RightBottomFrameUkraine,
-    CircleAbortionIsHealthcare];
+    CircleAbortionIsHealthcare,
+    CircleMyBodyMyChoice,
+    CircleBillFosterForCongress
+  ];
   
 
   /**
@@ -38,7 +45,8 @@ class ProfileFrameCreator extends React.Component {
   }
 
   componentDidMount(){
-    this.canvasElement = document.getElementById('mycanvas') as HTMLCanvasElement;
+    console.log(this.containerRef.current)
+    this.canvasElement = this.containerRef?.current?.querySelector(".profile-canvas") as HTMLCanvasElement;
     this.canvasContext = this.canvasElement.getContext('2d') as CanvasRenderingContext2D;
     this.profileImage.addEventListener("load", ((event: Event) => {
       this.SetProfileImage();
@@ -55,7 +63,7 @@ class ProfileFrameCreator extends React.Component {
       }
     }).bind(this));
 
-    this.filesElement = document.querySelector('#myFile') as HTMLInputElement;
+    this.filesElement = this.containerRef?.current?.querySelector('.files-input') as HTMLInputElement;
 
     this.downloadLinkElement = document.createElement('a');
     this.downloadLinkElement.download = "my-image.png";
@@ -65,43 +73,27 @@ class ProfileFrameCreator extends React.Component {
     if (!this.canvasContext){
       return;
     }
+
+    this.canvasContext.fillStyle="#FFFFFF";
+    this.canvasContext.clearRect(0,0,512,512);
+    if (!this.profileImageSet){
+      return;
+    }
+
     let width = 512;
     let height = 512;
     let offsetx = 0;
     let offsety = 0;
-    this.canvasContext.clearRect(0,0,512,512);
+    
     this.canvasContext.fillStyle="#555555";
     this.canvasContext.fillRect(0,0,512,512);
     if (this.profileImage.height == this.profileImage.width){
     } else if (this.profileImage.height > this.profileImage.width) {
       width = this.profileImage.width / this.profileImage.height * 512;
       offsetx = (512 - width)/2;
-
-      /*
-      this.canvasContext.drawImage(this.backgroundImage, (512-width*3)/2, (512-height*3), width*3, height*3);
-      
-      this.canvasContext.save();
-      this.canvasContext.filter = "blur(10px)";
-      let backgroundDataUrl = this.canvasElement?.toDataURL();
-      
-      this.canvasContext.restore();
-      //this.canvasContext.putImageData(backgroundDataUrl, 0, 0);
-      */
-      
     } else {
       height = this.profileImage.height / this.profileImage.width * 512;
       offsety = (512 - height)/2;
-
-      /*
-      this.canvasContext.drawImage(this.backgroundImage, (512-width*3)/2, (512-height*3), width*3, height*3);
-      
-      this.canvasContext.save();
-      this.canvasContext.filter = "blur(10px)";
-      let backgroundDataUrl = this.canvasContext.getImageData(0,0,512,512);
-      this.canvasContext.restore();
-      this.canvasContext.putImageData(backgroundDataUrl, 0, 0);
-
-      */
     }
     
     this.canvasContext.drawImage(this.profileImage, offsetx, offsety, width, height);
@@ -120,11 +112,19 @@ class ProfileFrameCreator extends React.Component {
       return;
     }
     let file = this.filesElement.files[0];
-    this.fileReader.readAsDataURL( file );
+    if (file){
+      this.profileImageSet = true;
+      this.fileReader.readAsDataURL( file );
+    } else {
+      this.profileImage.src = "";
+      this.profileImageSet = false;
+      this.SetProfileImage();
+    }
+    
   }
 
   SetFrame(htmlImageElement: HTMLImageElement) {
-    if (this.profileImage.src) {
+    if (this.profileImageSet) {
       this.SetProfileImage();
       this.canvasContext?.drawImage(htmlImageElement, 0, 0, 512, 512);
     }
@@ -135,39 +135,38 @@ class ProfileFrameCreator extends React.Component {
    */
   render() {
     return (
-      <>
-          <h1>Profile Frame Creator</h1>
-          <Box direction="row" >
-            <Box direction='column' background="#888888" >
-              {
-                this.frames.map(
-                  (src:string) => {
-                    return <GrommetImage
-                        key={src}
-                        className="profile-frame"
-                        width="100"
-                        height="100"
-                        src={src}
-                        onClick={(element) => { this.SetFrame(element.target as HTMLImageElement); }}
-                        >
-                      </GrommetImage>
-                  }
-                )
-              }
-            </Box>
-            <Box direction='column'>
-              <Box direction='row'>
-                <input type="file" id="myFile" name="filename" onChange={() => { this.LoadProfilePix()} } />
-                <button type="button" onClick={() => { this.DownloadImage(); }}>Download File</button>
-              </Box>
-              
-              <canvas id="mycanvas" width="512" height="512">
-              </canvas>
-            </Box>
-
+      <div className='profile-frame-creator-container' ref={this.containerRef} >
+        <h1>Profile Frame Creator</h1>
+        <Box direction="row" align='center' >
+          <Box direction='column' className='profile-frame-container'>
+            {
+              this.frames.map(
+                (src:string) => {
+                  return <GrommetImage
+                      key={src}
+                      className="profile-frame"
+                      width="100"
+                      height="100"
+                      src={src}
+                      onClick={(element) => { this.SetFrame(element.target as HTMLImageElement); }}
+                      >
+                    </GrommetImage>
+                }
+              )
+            }
           </Box>
-          
-      </>
+          <Box direction='column' width="530px">
+            <Box direction='row-reverse' className='controls-container'>
+            <Button className='download-button' onClick={() => { this.DownloadImage(); }}>Download File</Button>
+            <FileInput
+              messages = {{ dropPrompt: "Select Profile Picture" }}
+              className = "files-input"
+              onChange={() => { this.LoadProfilePix() } } ></FileInput>
+            </Box>
+            <canvas className='profile-canvas' width="512" height="512"></canvas>
+          </Box>
+        </Box>
+      </div>
     )
   }
 }

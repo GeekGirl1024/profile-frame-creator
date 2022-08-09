@@ -1,5 +1,42 @@
-.profile-frame {
+.profile-frame-creator-container .profile-frame {
   border-style: solid;
   border-width: 1px;
   border-color: black;
+  margin-bottom: 5px;
+  background-color: #888888;
+}
+
+.profile-frame-creator-container .profile-frame-container {
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.profile-frame-creator-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 650px;
+  height: 680px;
+}
+
+.profile-frame-creator-container button.download-button {
+  width: 200px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  height: 50px;
+}
+
+.profile-frame-creator-container .controls-container > div,
+.profile-frame-creator-container .controls-container > button {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  margin-left: 5px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.profile-frame-creator-container .profile-canvas {
+  margin-top: 20px;
 }
