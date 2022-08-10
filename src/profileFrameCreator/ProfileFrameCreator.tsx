@@ -11,10 +11,20 @@ import CircleMyBodyMyChoice from '../images/circle-my-body-my-choice.png';
 import CircleBillFosterForCongress from '../images/circle-bill-foster-for-congress.png';
 import './ProfileFrameCreator.css'
 
+class ProfileFrameCreatorProps {
+
+}
+
+class ProfileFrameCreatorState {
+  frames: string[] | null = null;
+  title: string | null = null;
+  render: boolean = false;
+}
+
 /**
   Class representing the ProfileFrameCreator.
 */
-class ProfileFrameCreator extends React.Component {
+class ProfileFrameCreator extends React.Component<ProfileFrameCreatorProps, ProfileFrameCreatorState> {
   private containerRef = createRef<HTMLDivElement>();
 
   private profileImage = new Image();
@@ -35,6 +45,8 @@ class ProfileFrameCreator extends React.Component {
     CircleMyBodyMyChoice,
     CircleBillFosterForCongress
   ];
+
+  private title: string = "Profile Frame Creator";
   
 
   /**
@@ -42,17 +54,41 @@ class ProfileFrameCreator extends React.Component {
    */
   constructor(props: any) {
     super(props);
+    this.state = { frames: null, title: null, render:false };
+  }
+
+  async GetConfig() {
+    await fetch('/static/config.json', {
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
+    }).then(function(response){
+        return response.json();
+    }).then(((myConfig: any)=>{
+        if (myConfig.files) {
+          let myFrames = myConfig.files as string[];
+          if (myFrames) {
+            this.frames = myFrames;
+          }  
+        }
+        let myTitle = myConfig.title as string;
+        if (myTitle) {
+          this.title = myTitle;
+        }
+    }).bind(this)).finally((()=>{
+      this.setState({frames:this.frames, title:this.title, render: true});
+    }).bind(this));
   }
 
   componentDidMount(){
     this.canvasElement = this.containerRef?.current?.querySelector(".profile-canvas") as HTMLCanvasElement;
     this.canvasContext = this.canvasElement.getContext('2d') as CanvasRenderingContext2D;
+    
     this.profileImage.addEventListener("load", ((event: Event) => {
       this.SetProfileImage();
       
     }).bind(this));
-
-    this.backgroundImage.style.filter="blur(5px)";
 
     this.fileReader.addEventListener("load", ((event: ProgressEvent<FileReader>) => {
       if (event.target && event.target.result){
@@ -63,9 +99,10 @@ class ProfileFrameCreator extends React.Component {
     }).bind(this));
 
     this.filesElement = this.containerRef?.current?.querySelector('.files-input') as HTMLInputElement;
-
     this.downloadLinkElement = document.createElement('a');
     this.downloadLinkElement.download = "my-image.png";
+
+    this.GetConfig();
   }
 
   SetProfileImage(){
@@ -134,12 +171,12 @@ class ProfileFrameCreator extends React.Component {
    */
   render() {
     return (
-      <div className='profile-frame-creator-container' ref={this.containerRef} >
-        <h1>Profile Frame Creator</h1>
+      <div className={ this.state.render ? 'profile-frame-creator-container' : 'profile-frame-creator-container display-none'} ref={this.containerRef} >
+        <h1>{ this.state.title }</h1>
         <Box direction="row" align='center' >
           <Box direction='column' className='profile-frame-container'>
             {
-              this.frames.map(
+              this.state.frames?.map(
                 (src:string) => {
                   return <GrommetImage
                       key={src}

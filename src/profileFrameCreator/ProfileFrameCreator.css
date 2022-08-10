@@ -40,3 +40,7 @@
 .profile-frame-creator-container .profile-canvas {
   margin-top: 20px;
 }
+
+.profile-frame-creator-container .display-none {
+  display: none;
+}
