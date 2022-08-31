@@ -1,6 +1,4 @@
-
 import React, { createRef, ReactElement, RefObject } from 'react';
-import ReactDOM from 'react-dom';
 import { Box, Button, FileInput, Image as GrommetImage, Text, ThemeContext } from 'grommet';
 import BasicUkraineImage from '../images/basic-ukraine.png';
 import CircleUkraineImage from '../images/circle-ukraine.png';
@@ -10,6 +8,7 @@ import CircleAbortionIsHealthcare from '../images/circle-abortion-is-healthcare.
 import CircleMyBodyMyChoice from '../images/circle-my-body-my-choice.png';
 import CircleBillFosterForCongress from '../images/circle-bill-foster-for-congress.png';
 import './ProfileFrameCreator.css'
+import { CustomFrame } from '../customFrame/CustomFrame';
 
 class ProfileFrameCreatorProps {
 
@@ -175,6 +174,8 @@ class ProfileFrameCreator extends React.Component<ProfileFrameCreatorProps, Prof
         <h1>{ this.state.title }</h1>
         <Box direction="row" align='center' >
           <Box direction='column' className='profile-frame-container'>
+          
+          <CustomFrame text='wheeeeeee' ></CustomFrame>
             {
               this.state.frames?.map(
                 (src:string) => {
@@ -190,6 +191,9 @@ class ProfileFrameCreator extends React.Component<ProfileFrameCreatorProps, Prof
                 }
               )
             }
+            
+            
+                
           </Box>
           <Box direction='column' width="530px">
             <Box direction='row-reverse' className='controls-container'>
